@@ -1,0 +1,83 @@
+{
+  "stories": {
+    "demo-story": {
+      "storyId": "demo-story",
+      "revealed": true,
+      "votes": {
+        "asha": {
+          "name": "Asha",
+          "points": "5"
+        }
+      }
+    },
+    "sprint-demo": {
+      "storyId": "sprint-demo",
+      "adminKey": "d2f961a5d3b8a05629b5497e",
+      "revealed": true,
+      "votes": {
+        "asha": {
+          "name": "Asha",
+          "points": "5"
+        }
+      }
+    },
+    "refined-demo": {
+      "storyId": "refined-demo",
+      "adminKey": "54d7b4179ebc1734864d0934",
+      "revealed": true,
+      "votes": {
+        "asha": {
+          "name": "Asha",
+          "points": "8"
+        }
+      }
+    },
+    "color-demo": {
+      "storyId": "color-demo",
+      "adminKey": "4d658348a34de24a78ba3b7b",
+      "revealed": false,
+      "votes": {}
+    },
+    "test": {
+      "storyId": "test",
+      "adminKey": "99e0295938f74bd8f4745df3",
+      "revealed": true,
+      "votes": {
+        "varun": {
+          "name": "Varun",
+          "points": "2"
+        }
+      }
+    },
+    "test2": {
+      "storyId": "test2",
+      "adminKey": "04cd375fe571113af42836fb",
+      "revealed": false,
+      "votes": {
+        "varun": {
+          "name": "Varun",
+          "points": "2"
+        },
+        "sandesh": {
+          "name": "Sandesh",
+          "points": "3"
+        }
+      }
+    },
+    "test3": {
+      "storyId": "test3",
+      "adminKey": "8b41df36bc1e97e936e3b89f",
+      "revealed": true,
+      "votes": {
+        "varun": {
+          "name": "Varun",
+          "points": "2"
+        },
+        "sandesh": {
+          "name": "Sandesh",
+          "points": "3"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "story-planning",
+  "version": "1.0.0",
+  "description": "Simple story planning website with hidden votes and BA reveal control.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  }
+}
