@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Story Planning</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+
+    <main class="shell">
+      <section id="fileModeNotice" class="file-mode-banner hidden">
+        <strong>Local file preview only.</strong>
+        <span>Colors will load here, but session creation and generated links need the app to run through `node server.js` or `npm start` and open `http://localhost:3000`.</span>
+      </section>
+
+      <section class="hero-card">
+        <div class="hero-copy">
+          <p class="eyebrow" id="modeEyebrow">Planning Session</p>
+          <h1 id="pageTitle">Story planning without early bias.</h1>
+          <p id="pageIntro" class="lede">
+            Create one session, share one participant link, and reveal the points only when you are ready.
+          </p>
+        </div>
+        <div class="hero-aside">
+          <div class="metric-tile">
+            <span class="metric-label">Votes Submitted</span>
+            <strong id="voteCount">0</strong>
+          </div>
+          <div class="metric-tile">
+            <span class="metric-label">Status</span>
+            <strong id="statusLabel">Hidden</strong>
+          </div>
+        </div>
+      </section>
+
+      <section id="adminView" class="view-grid">
+        <section class="panel setup-panel">
+          <div class="panel-header">
+            <p class="panel-kicker">BA Workspace</p>
+            <h2>Create and share a planning round</h2>
+          </div>
+
+          <div class="form-stack">
+            <label for="newStoryId">Story ID</label>
+            <input id="newStoryId" type="text" placeholder="example: checkout-story" />
+            <button id="createStoryBtn" class="primary-btn" type="button">Create Session Links</button>
+            <p id="createStatus" class="status-text"></p>
+          </div>
+
+          <div class="link-card">
+            <label for="participantLink">Participant Link</label>
+            <input id="participantLink" type="text" readonly />
+            <p class="helper-text">Share this link in Teams or any chat. Users will enter their own names after opening it.</p>
+          </div>
+
+          <div class="link-card muted-card">
+            <label for="adminLink">BA Private Link</label>
+            <input id="adminLink" type="text" readonly />
+            <p class="helper-text">Keep this link private. It contains the admin key for reveal and reset.</p>
+          </div>
+        </section>
+
+        <section class="panel control-panel">
+          <div class="panel-header">
+            <p class="panel-kicker">Session Control</p>
+            <h2>Reveal when everyone is ready</h2>
+          </div>
+
+          <div class="control-strip">
+            <div class="mini-stat">
+              <span>Current story</span>
+              <strong id="storyLabel">default-story</strong>
+            </div>
+            <div class="mini-stat">
+              <span>Responses</span>
+              <strong id="responseLabel">0</strong>
+            </div>
+          </div>
+
+          <div class="button-row">
+            <button id="revealBtn" class="primary-btn" type="button">Reveal Points</button>
+            <button id="resetBtn" class="secondary-btn" type="button">Reset Round</button>
+          </div>
+
+          <p id="adminStatus" class="status-text"></p>
+
+          <div id="hiddenNotice" class="notice-card">
+            <h3>Votes are still hidden</h3>
+            <p>Only the total number of submitted votes is shown here. Names and points appear after reveal.</p>
+          </div>
+
+          <div id="resultsPanel" class="results-panel"></div>
+        </section>
+      </section>
+
+      <section id="participantView" class="view-grid participant-layout">
+        <section class="panel participant-panel">
+          <div class="panel-header">
+            <p class="panel-kicker">Participant View</p>
+            <h2>Share your estimate privately</h2>
+          </div>
+
+          <form id="voteForm" class="form-stack">
+            <label for="name">Your Name</label>
+            <input id="name" name="name" type="text" placeholder="Enter your name" required />
+
+            <label for="points">Story Point</label>
+            <select id="points" name="points" required>
+              <option value="">Select points</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="5">5</option>
+              <option value="8">8</option>
+              <option value="13">13</option>
+              <option value="21">21</option>
+            </select>
+
+            <button type="submit" class="primary-btn">Submit My Vote</button>
+            <p id="voteStatus" class="status-text"></p>
+          </form>
+        </section>
+
+        <section class="panel waiting-panel">
+          <div class="panel-header">
+            <p class="panel-kicker">Live Session</p>
+            <h2 id="participantStoryTitle">Waiting for reveal</h2>
+          </div>
+
+          <div class="stage-card">
+            <p class="stage-copy" id="participantSummary">Votes are hidden until the BA reveals them.</p>
+            <div id="participantResults" class="results-panel"></div>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>

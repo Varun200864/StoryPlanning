@@ -247,7 +247,7 @@ function renderSetupState() {
 function renderFileModeState() {
   elements.fileModeNotice.classList.remove("hidden");
   renderSetupState();
-  elements.createStatus.textContent = "Direct file open cannot create links. Start the local server first.";
+  elements.createStatus.textContent = "Direct file open cannot create links. Open the site through a web server or your Hostinger domain first.";
   elements.createStoryBtn.disabled = true;
 }
 

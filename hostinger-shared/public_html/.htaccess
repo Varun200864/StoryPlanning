@@ -1,0 +1,9 @@
+RewriteEngine On
+
+# Keep existing files and folders accessible as-is.
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Route API requests to the PHP handler while preserving query params.
+RewriteRule ^api/(.*)$ api.php?route=/$1 [QSA,L]

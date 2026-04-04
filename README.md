@@ -1,21 +1,42 @@
 # Story Planning Website
 
-A local website for story point voting with hidden estimates and BA-controlled reveal.
+This project now uses one PHP-based structure for both local use and Hostinger shared hosting.
 
-## Flow
+## Main Structure
 
-1. BA opens the website and creates a session.
-2. The website generates two links:
-   - Participant link for the team
-   - Private BA link for reveal and reset
-3. Users open the participant link and enter their own name and story point.
-4. Nobody sees names or points before reveal.
-5. BA opens the private link and clicks `Reveal Points`.
-6. After reveal, names and story points are shown.
+```text
+public_html/
+  .htaccess
+  api.php
+  app.js
+  index.html
+  styles.css
+private/
+  data/
+    store.json
+router.php
+start-local.ps1
+start-local.bat
+```
 
-## Run locally
+## Run Locally
 
-```bash
+Option 1:
+
+```powershell
+npm start
+```
+
+Option 2:
+
+```powershell
+.\start-local.bat
+```
+
+If PHP is not in PATH, set it first:
+
+```powershell
+$env:PHP_EXE = "C:\\path\\to\\php.exe"
 npm start
 ```
 
@@ -25,11 +46,33 @@ Open:
 http://localhost:3000
 ```
 
-## Deployment
+## Upload To Hostinger
 
-This project is fully file based. You can copy the whole folder to your server and run `node server.js` there.
+Upload the contents of `public_html/` to Hostinger `public_html`.
+
+Create this folder beside it on the server:
+
+```text
+private/data/store.json
+```
+
+Final layout on Hostinger should look like:
+
+```text
+/home/your-hostinger-user/
+  public_html/
+    index.html
+    styles.css
+    app.js
+    api.php
+    .htaccess
+  private/
+    data/
+      store.json
+```
 
 ## Notes
 
-- Data is stored in `data/store.json`.
-- `Reset Round` clears the current story session and hides all points again.
+- Local and Hostinger now use the same frontend and the same PHP API logic.
+- Vote data is stored in `private/data/store.json`.
+- The older `server.js` version is left in the repo only as a fallback reference.

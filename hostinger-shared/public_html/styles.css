@@ -1,0 +1,393 @@
+:root {
+  --bg-top: #fff4d8;
+  --bg-bottom: #ffe1ef;
+  --sun: #ffd166;
+  --melon: #ff8fab;
+  --coral: #ff6b6b;
+  --sky: #7bdff2;
+  --mint: #87f0c4;
+  --grape: #7a5cff;
+  --panel: rgba(255, 255, 255, 0.72);
+  --panel-strong: rgba(255, 255, 255, 0.88);
+  --panel-border: rgba(122, 92, 255, 0.14);
+  --text: #2f2348;
+  --muted: #6d5f8f;
+  --shadow: 0 24px 60px rgba(122, 92, 255, 0.18);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(circle at top left, rgba(255, 209, 102, 0.85), transparent 28%),
+    radial-gradient(circle at top right, rgba(123, 223, 242, 0.7), transparent 24%),
+    radial-gradient(circle at bottom left, rgba(135, 240, 196, 0.72), transparent 22%),
+    linear-gradient(155deg, var(--bg-top) 0%, #fffaf2 35%, var(--bg-bottom) 100%);
+  position: relative;
+  overflow-x: hidden;
+}
+
+.ambient {
+  position: fixed;
+  border-radius: 999px;
+  filter: blur(70px);
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+.ambient-one {
+  width: 340px;
+  height: 340px;
+  top: -40px;
+  right: -60px;
+  background: rgba(255, 107, 107, 0.3);
+}
+
+.ambient-two {
+  width: 420px;
+  height: 420px;
+  bottom: -140px;
+  left: -120px;
+  background: rgba(122, 92, 255, 0.18);
+}
+
+.shell {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 28px 0 40px;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-card,
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: 30px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(18px);
+}
+
+.hero-card {
+  display: grid;
+  grid-template-columns: 1.4fr 0.8fr;
+  gap: 18px;
+  padding: 30px;
+  margin-bottom: 24px;
+  overflow: hidden;
+  position: relative;
+}
+
+.hero-card::after {
+  content: "";
+  position: absolute;
+  inset: auto -40px -60px auto;
+  width: 220px;
+  height: 220px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(255, 143, 171, 0.32), rgba(255, 143, 171, 0));
+}
+
+.eyebrow,
+.panel-kicker,
+.metric-label,
+.mini-stat span {
+  margin: 0 0 10px;
+  color: var(--grape);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  font-size: clamp(2.5rem, 5vw, 5rem);
+  line-height: 0.95;
+  margin-bottom: 14px;
+  max-width: 12ch;
+}
+
+h2 {
+  font-size: clamp(1.55rem, 2vw, 2rem);
+  margin-bottom: 10px;
+}
+
+h3 {
+  font-size: 1.05rem;
+  margin-bottom: 8px;
+}
+
+.lede,
+.helper-text,
+.status-text,
+.stage-copy,
+.notice-card p {
+  color: var(--muted);
+}
+
+.hero-aside {
+  display: grid;
+  gap: 16px;
+}
+
+.metric-tile,
+.link-card,
+.notice-card,
+.stage-card,
+.mini-stat,
+.vote-card,
+.empty-card {
+  border-radius: 22px;
+  border: 1px solid rgba(122, 92, 255, 0.12);
+  background: var(--panel-strong);
+}
+
+.metric-tile {
+  padding: 22px;
+  display: grid;
+  align-content: center;
+  min-height: 124px;
+}
+
+.metric-tile:nth-child(1) {
+  background: linear-gradient(135deg, rgba(255, 209, 102, 0.42), rgba(255, 255, 255, 0.92));
+}
+
+.metric-tile:nth-child(2) {
+  background: linear-gradient(135deg, rgba(123, 223, 242, 0.38), rgba(255, 255, 255, 0.92));
+}
+
+.metric-tile strong {
+  font-size: clamp(1.8rem, 4vw, 3rem);
+}
+
+.view-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 24px;
+}
+
+.panel {
+  padding: 26px;
+}
+
+.setup-panel {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 248, 251, 0.78));
+}
+
+.control-panel {
+  background: linear-gradient(180deg, rgba(248, 250, 255, 0.82), rgba(242, 255, 250, 0.8));
+}
+
+.participant-panel {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 250, 240, 0.78));
+}
+
+.waiting-panel {
+  background: linear-gradient(180deg, rgba(247, 247, 255, 0.86), rgba(255, 244, 252, 0.8));
+}
+
+.panel-header {
+  margin-bottom: 20px;
+}
+
+.form-stack {
+  display: grid;
+  gap: 12px;
+}
+
+label {
+  font-size: 0.95rem;
+  color: var(--text);
+  font-weight: 700;
+}
+
+input,
+select,
+button {
+  font: inherit;
+}
+
+input,
+select {
+  width: 100%;
+  border: 1px solid rgba(122, 92, 255, 0.18);
+  border-radius: 16px;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.82);
+  color: var(--text);
+  outline: none;
+}
+
+input:focus,
+select:focus {
+  border-color: rgba(122, 92, 255, 0.5);
+  box-shadow: 0 0 0 4px rgba(122, 92, 255, 0.1);
+}
+
+button {
+  border: 0;
+  border-radius: 999px;
+  padding: 14px 18px;
+  cursor: pointer;
+  font-weight: 800;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+.primary-btn {
+  color: #ffffff;
+  background: linear-gradient(135deg, var(--grape) 0%, var(--melon) 55%, var(--coral) 100%);
+  box-shadow: 0 18px 30px rgba(255, 107, 107, 0.22);
+}
+
+.secondary-btn {
+  color: var(--text);
+  background: linear-gradient(135deg, rgba(123, 223, 242, 0.58), rgba(135, 240, 196, 0.48));
+  border: 1px solid rgba(123, 223, 242, 0.28);
+}
+
+.button-row {
+  display: flex;
+  gap: 12px;
+  margin: 20px 0 12px;
+}
+
+.link-card,
+.notice-card,
+.stage-card {
+  padding: 18px;
+}
+
+.link-card {
+  margin-top: 18px;
+}
+
+.muted-card {
+  background: linear-gradient(135deg, rgba(123, 223, 242, 0.24), rgba(122, 92, 255, 0.08), rgba(255, 255, 255, 0.88));
+}
+
+.control-strip {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.mini-stat {
+  padding: 16px;
+}
+
+.mini-stat:nth-child(1) {
+  background: linear-gradient(135deg, rgba(255, 209, 102, 0.32), rgba(255, 255, 255, 0.9));
+}
+
+.mini-stat:nth-child(2) {
+  background: linear-gradient(135deg, rgba(135, 240, 196, 0.32), rgba(255, 255, 255, 0.9));
+}
+
+.mini-stat strong {
+  display: block;
+  font-size: 1.15rem;
+}
+
+.results-panel {
+  display: grid;
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.vote-card {
+  padding: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(255, 245, 250, 0.88));
+}
+
+.vote-card .vote-name {
+  font-size: 1rem;
+  color: var(--text);
+  font-weight: 700;
+}
+
+.vote-card .vote-points {
+  min-width: 56px;
+  height: 56px;
+  border-radius: 18px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, rgba(122, 92, 255, 0.14), rgba(255, 107, 107, 0.2));
+  color: var(--grape);
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+
+.empty-card {
+  padding: 18px;
+  color: var(--muted);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.84), rgba(247, 247, 255, 0.82));
+}
+
+.participant-layout {
+  display: none;
+}
+
+.status-text {
+  min-height: 24px;
+  font-weight: 600;
+}
+
+.hidden {
+  display: none;
+}
+
+@media (max-width: 920px) {
+  .hero-card,
+  .view-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .button-row {
+    flex-direction: column;
+  }
+}
+
+.file-mode-banner {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 16px 18px;
+  margin-bottom: 18px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(122, 92, 255, 0.14), rgba(255, 107, 107, 0.16), rgba(255, 209, 102, 0.28));
+  border: 1px solid rgba(122, 92, 255, 0.16);
+  color: var(--text);
+  box-shadow: var(--shadow);
+}
+
+.file-mode-banner strong {
+  white-space: nowrap;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+}

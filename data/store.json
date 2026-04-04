@@ -78,6 +78,21 @@
           "points": "3"
         }
       }
+    },
+    "test4": {
+      "storyId": "test4",
+      "adminKey": "9bec3edf36a0fa5af2ea08b7",
+      "revealed": true,
+      "votes": {
+        "varun": {
+          "name": "Varun",
+          "points": "2"
+        },
+        "sandesh": {
+          "name": "Sandesh",
+          "points": "5"
+        }
+      }
     }
   }
 }

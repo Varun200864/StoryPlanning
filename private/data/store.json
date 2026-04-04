@@ -1,0 +1,19 @@
+{
+    "stories": {
+        "test": {
+            "storyId": "test",
+            "adminKey": "debc73c4bc51a4c019df9c41",
+            "revealed": true,
+            "votes": {
+                "varun": {
+                    "name": "Varun",
+                    "points": "2"
+                },
+                "sandesh": {
+                    "name": "Sandesh",
+                    "points": "3"
+                }
+            }
+        }
+    }
+}
