@@ -99,14 +99,23 @@ async function parseJsonResponse(response) {
 }
 
 async function request(path, options = {}) {
+  const method = (options.method || "GET").toUpperCase();
   const fetchOptions = {
+    cache: "no-store",
     headers: {
       "Content-Type": "application/json"
     },
     ...options
   };
 
-  const endpoints = [buildApiUrl(path), buildPhpApiUrl(path)];
+  const endpoints = [buildApiUrl(path), buildPhpApiUrl(path)].map((endpoint) => {
+    const requestUrl = new URL(endpoint);
+    if (method === "GET") {
+      requestUrl.searchParams.set("_ts", Date.now().toString());
+    }
+    return requestUrl;
+  });
+
   let lastError = new Error("Request failed");
 
   for (const endpoint of endpoints) {
