@@ -4,12 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Story Planning</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=20260514-7" />
   </head>
   <body>
-    <div class="ambient ambient-one"></div>
-    <div class="ambient ambient-two"></div>
-
     <main class="shell">
       <section class="hero-card">
         <div class="hero-copy">
@@ -19,16 +16,7 @@
             Create one session, share one participant link, and reveal the points only when you are ready.
           </p>
         </div>
-        <div class="hero-aside">
-          <div class="metric-tile">
-            <span class="metric-label">Votes Submitted</span>
-            <strong id="voteCount">0</strong>
-          </div>
-          <div class="metric-tile">
-            <span class="metric-label">Status</span>
-            <strong id="statusLabel">Hidden</strong>
-          </div>
-        </div>
+        <button id="homeBtn" class="home-btn" type="button">Home</button>
       </section>
 
       <section id="adminView" class="view-grid">
@@ -38,27 +26,20 @@
             <h2>Create and share a planning round</h2>
           </div>
 
-          <div class="form-stack">
+          <form id="storyForm" class="form-stack">
             <label for="newStoryId">Story ID</label>
             <input id="newStoryId" type="text" placeholder="example: checkout-story" />
-            <button id="createStoryBtn" class="primary-btn" type="button">Create Session Links</button>
+            <button id="createStoryBtn" class="primary-btn" type="submit">Create Participant Link</button>
             <p id="createStatus" class="status-text"></p>
-          </div>
+          </form>
 
           <div class="link-card">
             <label for="participantLink">Participant Link</label>
             <input id="participantLink" type="text" readonly />
-            <p class="helper-text">Share this link in Teams or any chat. Users will enter their own names after opening it.</p>
-          </div>
-
-          <div class="link-card muted-card">
-            <label for="adminLink">BA Private Link</label>
-            <input id="adminLink" type="text" readonly />
-            <p class="helper-text">Keep this link private. It contains the admin key for reveal and reset.</p>
           </div>
         </section>
 
-        <section class="panel control-panel">
+        <section id="controlPanel" class="panel control-panel">
           <div class="panel-header">
             <p class="panel-kicker">Session Control</p>
             <h2>Reveal when everyone is ready</h2>
@@ -78,13 +59,13 @@
           <div class="button-row">
             <button id="revealBtn" class="primary-btn" type="button">Reveal Points</button>
             <button id="resetBtn" class="secondary-btn" type="button">Reset Round</button>
+            <button id="newSessionBtn" class="secondary-btn" type="button">New Session</button>
           </div>
 
           <p id="adminStatus" class="status-text"></p>
 
           <div id="hiddenNotice" class="notice-card">
             <h3>Votes are still hidden</h3>
-            <p>Only the total number of submitted votes is shown here. Names and points appear after reveal.</p>
           </div>
 
           <div id="resultsPanel" class="results-panel"></div>
@@ -133,6 +114,6 @@
       </section>
     </main>
 
-    <script src="app.js"></script>
+    <script src="app.js?v=20260514-7"></script>
   </body>
 </html>

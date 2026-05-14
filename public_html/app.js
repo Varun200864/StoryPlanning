@@ -2,31 +2,37 @@ const elements = {
   modeEyebrow: document.getElementById("modeEyebrow"),
   pageTitle: document.getElementById("pageTitle"),
   pageIntro: document.getElementById("pageIntro"),
-  voteCount: document.getElementById("voteCount"),
-  statusLabel: document.getElementById("statusLabel"),
+  homeBtn: document.getElementById("homeBtn"),
   fileModeNotice: document.getElementById("fileModeNotice"),
   adminView: document.getElementById("adminView"),
   participantView: document.getElementById("participantView"),
+  storyForm: document.getElementById("storyForm"),
   newStoryId: document.getElementById("newStoryId"),
   createStoryBtn: document.getElementById("createStoryBtn"),
   createStatus: document.getElementById("createStatus"),
   participantLink: document.getElementById("participantLink"),
-  adminLink: document.getElementById("adminLink"),
+  controlPanel: document.getElementById("controlPanel"),
   storyLabel: document.getElementById("storyLabel"),
   responseLabel: document.getElementById("responseLabel"),
   revealBtn: document.getElementById("revealBtn"),
   resetBtn: document.getElementById("resetBtn"),
+  newSessionBtn: document.getElementById("newSessionBtn"),
   adminStatus: document.getElementById("adminStatus"),
   hiddenNotice: document.getElementById("hiddenNotice"),
   resultsPanel: document.getElementById("resultsPanel"),
   voteForm: document.getElementById("voteForm"),
   name: document.getElementById("name"),
-  points: document.getElementById("points"),
+  pointCards: document.getElementById("pointCards"),
   voteStatus: document.getElementById("voteStatus"),
   participantStoryTitle: document.getElementById("participantStoryTitle"),
   participantSummary: document.getElementById("participantSummary"),
   participantResults: document.getElementById("participantResults")
 };
+
+let storyPollingId = null;
+let storyIdHasManualEdit = false;
+let syncedStoryId = "";
+let isCreatingParticipantLink = false;
 
 function getUrl() {
   return new URL(window.location.href);
@@ -141,21 +147,23 @@ function setMode(mode) {
 
   elements.adminView.style.display = isSetup || isAdmin ? "grid" : "none";
   elements.participantView.style.display = isParticipant ? "grid" : "none";
+  elements.adminView.classList.toggle("setup-mode", isSetup);
+  elements.homeBtn.style.display = "inline-flex";
+  elements.controlPanel.style.display = isSetup ? "none" : "block";
   elements.revealBtn.style.display = isSetup ? "none" : "inline-flex";
   elements.resetBtn.style.display = isSetup ? "none" : "inline-flex";
+  elements.newSessionBtn.style.display = isSetup ? "none" : "inline-flex";
 
   if (isSetup) {
     elements.modeEyebrow.textContent = "BA Workspace";
     elements.pageTitle.textContent = "Create a planning round and share it in seconds.";
-    elements.pageIntro.textContent = "Generate both links here, send only the participant link to the team, and keep the BA link private.";
-    elements.voteCount.textContent = "-";
-    elements.statusLabel.textContent = "Setup";
+    elements.pageIntro.textContent = "Create one link for participants.";
     elements.storyLabel.textContent = "Not created yet";
     elements.responseLabel.textContent = "-";
   } else if (isAdmin) {
     elements.modeEyebrow.textContent = "BA Workspace";
     elements.pageTitle.textContent = "Run the reveal when the room is ready.";
-    elements.pageIntro.textContent = "Track total responses, then reveal all names and points together when the team is done.";
+    elements.pageIntro.textContent = "Track responses and reveal points.";
   } else {
     elements.modeEyebrow.textContent = "Participant View";
     elements.pageTitle.textContent = "Estimate privately, reveal together.";
@@ -166,7 +174,6 @@ function setMode(mode) {
 function setLinks(storyId, adminKey = "") {
   if (isFileMode()) {
     elements.participantLink.value = "Run with http://localhost:3000 to generate shareable links";
-    elements.adminLink.value = "Run with http://localhost:3000 to generate BA private link";
     return;
   }
 
@@ -174,10 +181,15 @@ function setLinks(storyId, adminKey = "") {
   participantUrl.searchParams.set("story", storyId);
   elements.participantLink.value = participantUrl.toString();
 
-  const effectiveAdminKey = adminKey || getAdminKey();
-  elements.adminLink.value = effectiveAdminKey
-    ? `${window.location.origin}/?story=${encodeURIComponent(storyId)}&adminKey=${encodeURIComponent(effectiveAdminKey)}`
-    : "";
+}
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
 
 function renderVoteCards(container, votes) {
@@ -190,8 +202,8 @@ function renderVoteCards(container, votes) {
     .map(
       (vote) => `
         <article class="vote-card">
-          <div class="vote-name">${vote.name}</div>
-          <div class="vote-points">${vote.points}</div>
+          <div class="vote-name">${escapeHtml(vote.name)}</div>
+          <div class="vote-points">${escapeHtml(vote.points)}</div>
         </article>
       `
     )
@@ -202,13 +214,28 @@ function renderAdminStory(story) {
   elements.storyLabel.textContent = story.storyId;
   elements.responseLabel.textContent = String(story.totalVotes);
   elements.hiddenNotice.style.display = story.revealed ? "none" : "block";
-  elements.resultsPanel.style.display = story.revealed ? "grid" : "none";
+  elements.resultsPanel.style.display = "grid";
 
   if (story.revealed) {
     renderVoteCards(elements.resultsPanel, story.votes);
   } else {
-    elements.resultsPanel.innerHTML = "";
+    renderHiddenVoteCards(elements.resultsPanel, story.votes);
   }
+}
+
+function renderHiddenVoteCards(container, votes) {
+  if (!votes.length) {
+    container.innerHTML = '<div class="empty-card">No votes submitted yet.</div>';
+    return;
+  }
+
+  container.innerHTML = votes.map((vote) => `
+    <article class="hidden-vote-card">
+      <span class="hidden-vote-dot"></span>
+      <span>${escapeHtml(vote.name)}</span>
+      <strong class="hidden-points">Hidden</strong>
+    </article>
+  `).join("");
 }
 
 function renderParticipantStory(story) {
@@ -223,13 +250,32 @@ function renderParticipantStory(story) {
   }
 }
 
+function setSubmittedPoint(points) {
+  elements.pointCards.querySelectorAll(".point-card").forEach((card) => {
+    const isSelected = card.dataset.value === points;
+    card.classList.toggle("is-submitted", isSelected);
+    card.setAttribute("aria-pressed", isSelected ? "true" : "false");
+  });
+}
+
+function clearSubmittedPoint() {
+  elements.pointCards.querySelectorAll(".point-card").forEach((card) => {
+    card.classList.remove("is-submitted");
+    card.setAttribute("aria-pressed", "false");
+  });
+}
+
 function renderStory(story) {
   setMode(story.isAdmin ? "admin" : "participant");
-  setLinks(story.storyId);
-  elements.newStoryId.value = story.storyId;
-  elements.voteCount.textContent = String(story.totalVotes);
-  elements.statusLabel.textContent = story.revealed ? "Revealed" : "Hidden";
+  setLinks(story.sessionId || getStoryId());
+  const canSyncStoryId =
+    !storyIdHasManualEdit &&
+    (elements.newStoryId.value === "" || elements.newStoryId.value === syncedStoryId);
 
+  if (canSyncStoryId) {
+    elements.newStoryId.value = story.storyId;
+    syncedStoryId = story.storyId;
+  }
   if (story.isAdmin) {
     renderAdminStory(story);
   } else {
@@ -239,15 +285,15 @@ function renderStory(story) {
 
 function renderSetupState() {
   setMode("setup");
+  storyIdHasManualEdit = false;
+  syncedStoryId = "";
   elements.newStoryId.value = "";
   elements.participantLink.value = "";
-  elements.adminLink.value = "";
   elements.createStatus.textContent = "";
   elements.adminStatus.textContent = "";
   elements.hiddenNotice.style.display = "block";
   elements.hiddenNotice.innerHTML = `
     <h3>Create your first session</h3>
-    <p>Choose a story ID, generate the links, and then share only the participant link with your users.</p>
   `;
   elements.resultsPanel.style.display = "none";
   elements.resultsPanel.innerHTML = "";
@@ -262,6 +308,10 @@ function renderFileModeState() {
 
 async function loadStory() {
   try {
+    if (document.activeElement === elements.newStoryId) {
+      return;
+    }
+
     const story = await request("/api/story");
     renderStory(story);
   } catch (error) {
@@ -270,46 +320,139 @@ async function loadStory() {
   }
 }
 
-elements.createStoryBtn.addEventListener("click", async () => {
+function startStoryPolling() {
+  if (storyPollingId) {
+    return;
+  }
+
+  storyPollingId = setInterval(loadStory, 1000);
+}
+
+function stopStoryPolling() {
+  if (!storyPollingId) {
+    return;
+  }
+
+  clearInterval(storyPollingId);
+  storyPollingId = null;
+}
+
+function clearPageUrl() {
+  const url = getUrl();
+  url.searchParams.delete("story");
+  url.searchParams.delete("adminKey");
+  window.history.replaceState({}, "", url);
+}
+
+async function createParticipantLink() {
+  if (isCreatingParticipantLink) {
+    return;
+  }
+
+  isCreatingParticipantLink = true;
   elements.createStatus.textContent = "";
+  const requestedStoryId = elements.newStoryId.value;
 
   try {
     const data = await request("/api/story/create", {
       method: "POST",
       body: JSON.stringify({
-        storyId: elements.newStoryId.value
+        storyId: requestedStoryId
       })
     });
 
-    setPageUrl(data.storyId, data.adminKey);
-    setLinks(data.storyId, data.adminKey);
-    elements.createStatus.textContent = "Session created. Share the participant link and keep the BA link private.";
+    storyIdHasManualEdit = false;
+    syncedStoryId = data.storyId;
+    elements.newStoryId.value = data.storyId;
+    setPageUrl(data.sessionId, data.adminKey);
+    setLinks(data.sessionId, data.adminKey);
+    elements.createStatus.textContent = "New session created.";
     await loadStory();
+    startStoryPolling();
   } catch (error) {
     elements.createStatus.textContent = error.message;
+  } finally {
+    isCreatingParticipantLink = false;
   }
+}
+
+if (elements.storyForm) {
+  elements.storyForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    createParticipantLink();
+  });
+}
+
+elements.createStoryBtn.addEventListener("click", (event) => {
+  event.preventDefault();
+  createParticipantLink();
 });
 
 elements.voteForm.addEventListener("submit", async (event) => {
   event.preventDefault();
+  elements.voteStatus.textContent = "Please click a point card to submit your vote.";
+});
+
+elements.pointCards.addEventListener("click", async (event) => {
+  const card = event.target.closest("button.point-card");
+  if (!card) {
+    return;
+  }
+
+  clearSubmittedPoint();
+  card.classList.add("is-pending");
+  await submitVote(card.dataset.value);
+  card.classList.remove("is-pending");
+});
+
+elements.newStoryId.addEventListener("input", () => {
+  storyIdHasManualEdit = true;
+});
+
+elements.newStoryId.addEventListener("keydown", (event) => {
+  if (event.key !== "Enter") {
+    return;
+  }
+
+  event.preventDefault();
+  createParticipantLink();
+});
+
+elements.newStoryId.addEventListener("keyup", (event) => {
+  if (event.key !== "Enter") {
+    return;
+  }
+
+  event.preventDefault();
+  createParticipantLink();
+});
+
+async function submitVote(points) {
   elements.voteStatus.textContent = "";
 
+  const name = elements.name.value.trim();
+  if (!name) {
+    elements.voteStatus.textContent = "Please enter your name before selecting a card.";
+    elements.name.focus();
+    return;
+  }
+
   try {
-    const data = await request("/api/vote", {
+    await request("/api/vote", {
       method: "POST",
       body: JSON.stringify({
-        name: elements.name.value,
-        points: elements.points.value
+        name,
+        points
       })
     });
 
-    elements.voteStatus.textContent = "Your point has been submitted.";
-    elements.points.value = "";
-    renderStory(data.story);
+    setSubmittedPoint(points);
+    elements.voteStatus.textContent = `Submitted point: ${points}`;
+    await loadStory();
   } catch (error) {
     elements.voteStatus.textContent = error.message;
   }
-});
+}
 
 elements.revealBtn.addEventListener("click", async () => {
   elements.adminStatus.textContent = "";
@@ -343,6 +486,15 @@ elements.resetBtn.addEventListener("click", async () => {
   }
 });
 
+function goHome() {
+  stopStoryPolling();
+  clearPageUrl();
+  renderSetupState();
+}
+
+elements.newSessionBtn.addEventListener("click", goHome);
+elements.homeBtn.addEventListener("click", goHome);
+
 if (isFileMode()) {
   renderFileModeState();
 } else if (!hasStoryParam()) {
@@ -350,5 +502,5 @@ if (isFileMode()) {
 } else {
   setLinks(getStoryId());
   loadStory();
-  setInterval(loadStory, 5000);
+  startStoryPolling();
 }

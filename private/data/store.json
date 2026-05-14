@@ -1,60 +1,53 @@
 {
     "stories": {
-        "test": {
-            "storyId": "test",
-            "adminKey": "debc73c4bc51a4c019df9c41",
-            "revealed": true,
+        "test12": {
+            "storyId": "test12",
+            "adminKey": "0672f9a72728b941114016b0",
+            "revealed": false,
+            "votes": []
+        },
+        "test17": {
+            "storyId": "test17",
+            "adminKey": "4da68d7a9a75cc48465079a4",
+            "revealed": false,
+            "votes": [],
+            "sessionId": "test17"
+        },
+        "shared-story-php-9cf4c296ef09": {
+            "sessionId": "shared-story-php-9cf4c296ef09",
+            "storyId": "shared-story-php",
+            "adminKey": "f1c65866039f9f56c5a5082c",
+            "revealed": false,
             "votes": {
-                "varun": {
-                    "name": "Varun",
-                    "points": "2"
-                },
-                "sandesh": {
-                    "name": "Sandesh",
+                "a-user": {
+                    "name": "A User",
                     "points": "3"
                 }
             }
         },
-        "test2": {
-            "storyId": "test2",
-            "adminKey": "aafea7b3476d171729ef50eb",
+        "shared-story-php-cfc8dfe5519d": {
+            "sessionId": "shared-story-php-cfc8dfe5519d",
+            "storyId": "shared-story-php",
+            "adminKey": "eb0331981b7ffed4b46d3e5c",
             "revealed": false,
             "votes": {
-                "varun": {
-                    "name": "Varun",
-                    "points": "3"
-                }
-            }
-        },
-        "test3": {
-            "storyId": "test3",
-            "adminKey": "c93f94839455b1ff50236b62",
-            "revealed": false,
-            "votes": {
-                "varun": {
-                    "name": "Varun",
-                    "points": "5"
-                }
-            }
-        },
-        "test4": {
-            "storyId": "test4",
-            "adminKey": "69b1cc088ead444c9e1963db",
-            "revealed": true,
-            "votes": {
-                "varun": {
-                    "name": "Varun",
-                    "points": "5"
-                },
-                "sandesh": {
-                    "name": "Sandesh",
+                "b-user": {
+                    "name": "B User",
                     "points": "8"
                 }
             }
         },
-        "test5": {
-            "storyId": "test5",
-            "adminKey": "bd0e96adfd133bc9ccf2c337",
+        "test1-1b50a12bad1c": {
+            "sessionId": "test1-1b50a12bad1c",
+            "storyId": "test1",
+            "adminKey": "285e052837ccd763d63816e4",
+            "revealed": false,
+            "votes": []
+        },
+        "test1-c0eba612ef5e": {
+            "sessionId": "test1-c0eba612ef5e",
+            "storyId": "test1",
+            "adminKey": "60636f19644206e7e9b42732",
             "revealed": true,
             "votes": {
                 "varun": {

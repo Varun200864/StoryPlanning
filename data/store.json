@@ -1,96 +1,32 @@
 {
   "stories": {
-    "demo-story": {
-      "storyId": "demo-story",
-      "revealed": true,
-      "votes": {
-        "asha": {
-          "name": "Asha",
-          "points": "5"
-        }
-      }
-    },
-    "sprint-demo": {
-      "storyId": "sprint-demo",
-      "adminKey": "d2f961a5d3b8a05629b5497e",
-      "revealed": true,
-      "votes": {
-        "asha": {
-          "name": "Asha",
-          "points": "5"
-        }
-      }
-    },
-    "refined-demo": {
-      "storyId": "refined-demo",
-      "adminKey": "54d7b4179ebc1734864d0934",
-      "revealed": true,
-      "votes": {
-        "asha": {
-          "name": "Asha",
-          "points": "8"
-        }
-      }
-    },
-    "color-demo": {
-      "storyId": "color-demo",
-      "adminKey": "4d658348a34de24a78ba3b7b",
+    "same-story": {
+      "storyId": "same-story",
+      "adminKey": "42861745da2704d5ca79c2f0",
       "revealed": false,
       "votes": {}
     },
-    "test": {
-      "storyId": "test",
-      "adminKey": "99e0295938f74bd8f4745df3",
-      "revealed": true,
-      "votes": {
-        "varun": {
-          "name": "Varun",
-          "points": "2"
-        }
-      }
-    },
-    "test2": {
-      "storyId": "test2",
-      "adminKey": "04cd375fe571113af42836fb",
+    "shared-story-daaffb2a18d7": {
+      "sessionId": "shared-story-daaffb2a18d7",
+      "storyId": "shared-story",
+      "adminKey": "1de3bc8e30d131d4e0626447",
       "revealed": false,
       "votes": {
-        "varun": {
-          "name": "Varun",
-          "points": "2"
-        },
-        "sandesh": {
-          "name": "Sandesh",
+        "a-user": {
+          "name": "A User",
           "points": "3"
         }
       }
     },
-    "test3": {
-      "storyId": "test3",
-      "adminKey": "8b41df36bc1e97e936e3b89f",
-      "revealed": true,
+    "shared-story-2c6460946aa4": {
+      "sessionId": "shared-story-2c6460946aa4",
+      "storyId": "shared-story",
+      "adminKey": "a92891df2e08bc70c0168e40",
+      "revealed": false,
       "votes": {
-        "varun": {
-          "name": "Varun",
-          "points": "2"
-        },
-        "sandesh": {
-          "name": "Sandesh",
-          "points": "3"
-        }
-      }
-    },
-    "test4": {
-      "storyId": "test4",
-      "adminKey": "9bec3edf36a0fa5af2ea08b7",
-      "revealed": true,
-      "votes": {
-        "varun": {
-          "name": "Varun",
-          "points": "2"
-        },
-        "sandesh": {
-          "name": "Sandesh",
-          "points": "5"
+        "b-user": {
+          "name": "B User",
+          "points": "8"
         }
       }
     }

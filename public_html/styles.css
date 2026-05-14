@@ -12,7 +12,7 @@
   --panel-border: rgba(122, 92, 255, 0.14);
   --text: #2f2348;
   --muted: #6d5f8f;
-  --shadow: 0 24px 60px rgba(122, 92, 255, 0.18);
+  --shadow: 0 8px 24px rgba(47, 35, 72, 0.08);
 }
 
 * {
@@ -24,43 +24,15 @@ body {
   min-height: 100vh;
   font-family: "Trebuchet MS", "Segoe UI", sans-serif;
   color: var(--text);
-  background:
-    radial-gradient(circle at top left, rgba(255, 209, 102, 0.85), transparent 28%),
-    radial-gradient(circle at top right, rgba(123, 223, 242, 0.7), transparent 24%),
-    radial-gradient(circle at bottom left, rgba(135, 240, 196, 0.72), transparent 22%),
-    linear-gradient(155deg, var(--bg-top) 0%, #fffaf2 35%, var(--bg-bottom) 100%);
+  background: #fffaf2;
   position: relative;
   overflow-x: hidden;
-}
-
-.ambient {
-  position: fixed;
-  border-radius: 999px;
-  filter: blur(70px);
-  opacity: 0.65;
-  pointer-events: none;
-}
-
-.ambient-one {
-  width: 340px;
-  height: 340px;
-  top: -40px;
-  right: -60px;
-  background: rgba(255, 107, 107, 0.3);
-}
-
-.ambient-two {
-  width: 420px;
-  height: 420px;
-  bottom: -140px;
-  left: -120px;
-  background: rgba(122, 92, 255, 0.18);
 }
 
 .shell {
   width: min(1180px, calc(100% - 32px));
   margin: 0 auto;
-  padding: 28px 0 40px;
+  padding: 16px 0 28px;
   position: relative;
   z-index: 1;
 }
@@ -69,36 +41,35 @@ body {
 .panel {
   background: var(--panel);
   border: 1px solid var(--panel-border);
-  border-radius: 30px;
+  border-radius: 12px;
   box-shadow: var(--shadow);
-  backdrop-filter: blur(18px);
 }
 
 .hero-card {
-  display: grid;
-  grid-template-columns: 1.4fr 0.8fr;
-  gap: 18px;
-  padding: 30px;
-  margin-bottom: 24px;
-  overflow: hidden;
-  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
 }
 
-.hero-card::after {
-  content: "";
-  position: absolute;
-  inset: auto -40px -60px auto;
-  width: 220px;
-  height: 220px;
-  border-radius: 999px;
-  background: radial-gradient(circle, rgba(255, 143, 171, 0.32), rgba(255, 143, 171, 0));
+.home-btn {
+  display: inline-flex;
+  flex: 0 0 auto;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(122, 92, 255, 0.2);
+  border-radius: 8px;
+  padding: 8px 12px;
+  box-shadow: none;
 }
 
 .eyebrow,
 .panel-kicker,
 .metric-label,
 .mini-stat span {
-  margin: 0 0 10px;
+  margin: 0 0 6px;
   color: var(--grape);
   text-transform: uppercase;
   letter-spacing: 0.16em;
@@ -114,10 +85,10 @@ p {
 }
 
 h1 {
-  font-size: clamp(2.5rem, 5vw, 5rem);
-  line-height: 0.95;
-  margin-bottom: 14px;
-  max-width: 12ch;
+  font-size: clamp(1.25rem, 2vw, 1.85rem);
+  line-height: 1;
+  margin-bottom: 8px;
+  max-width: 38ch;
 }
 
 h2 {
@@ -138,58 +109,42 @@ h3 {
   color: var(--muted);
 }
 
-.hero-aside {
-  display: grid;
-  gap: 16px;
+.lede {
+  font-size: 0.92rem;
+  margin-bottom: 0;
 }
 
-.metric-tile,
 .link-card,
 .notice-card,
 .stage-card,
 .mini-stat,
 .vote-card,
 .empty-card {
-  border-radius: 22px;
+  border-radius: 10px;
   border: 1px solid rgba(122, 92, 255, 0.12);
   background: var(--panel-strong);
-}
-
-.metric-tile {
-  padding: 22px;
-  display: grid;
-  align-content: center;
-  min-height: 124px;
-}
-
-.metric-tile:nth-child(1) {
-  background: linear-gradient(135deg, rgba(255, 209, 102, 0.42), rgba(255, 255, 255, 0.92));
-}
-
-.metric-tile:nth-child(2) {
-  background: linear-gradient(135deg, rgba(123, 223, 242, 0.38), rgba(255, 255, 255, 0.92));
-}
-
-.metric-tile strong {
-  font-size: clamp(1.8rem, 4vw, 3rem);
 }
 
 .view-grid {
   display: grid;
   grid-template-columns: 1.05fr 0.95fr;
-  gap: 24px;
+  gap: 14px;
+}
+
+.view-grid.setup-mode {
+  grid-template-columns: minmax(0, 640px);
 }
 
 .panel {
-  padding: 26px;
+  padding: 16px;
 }
 
 .setup-panel {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 248, 251, 0.78));
+  background: rgba(255, 255, 255, 0.82);
 }
 
 .control-panel {
-  background: linear-gradient(180deg, rgba(248, 250, 255, 0.82), rgba(242, 255, 250, 0.8));
+  background: rgba(255, 255, 255, 0.82);
 }
 
 .participant-panel {
@@ -201,18 +156,97 @@ h3 {
 }
 
 .panel-header {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .form-stack {
   display: grid;
-  gap: 12px;
+  gap: 8px;
+}
+
+.setup-panel .form-stack {
+  position: sticky;
+  top: 20px;
+  z-index: 1;
 }
 
 label {
   font-size: 0.95rem;
   color: var(--text);
   font-weight: 700;
+}
+
+.point-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 12px;
+}
+
+.point-card {
+  border: 1px solid rgba(122, 92, 255, 0.2);
+  border-radius: 24px;
+  padding: 20px 0;
+  background: rgba(255, 255, 255, 0.86);
+  color: var(--text);
+  font-size: 1.3rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.point-card:hover,
+.point-card:focus {
+  transform: translateY(-2px);
+  border-color: rgba(122, 92, 255, 0.5);
+  box-shadow: 0 16px 28px rgba(122, 92, 255, 0.14);
+}
+
+.point-card.is-pending {
+  opacity: 0.75;
+}
+
+.point-card.is-submitted {
+  border-color: var(--grape);
+  background: linear-gradient(135deg, rgba(122, 92, 255, 0.18), rgba(135, 240, 196, 0.28));
+  color: var(--grape);
+  box-shadow: 0 0 0 3px rgba(122, 92, 255, 0.14);
+  transform: translateY(-2px);
+}
+
+.point-card.is-submitted::after {
+  content: "Submitted";
+  display: block;
+  margin-top: 6px;
+  color: var(--text);
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.hidden-vote-card {
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(122, 92, 255, 0.12);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.hidden-vote-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: rgba(122, 92, 255, 0.5);
+}
+
+.hidden-points {
+  margin-left: auto;
+  color: var(--muted);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
 input,
@@ -225,8 +259,8 @@ input,
 select {
   width: 100%;
   border: 1px solid rgba(122, 92, 255, 0.18);
-  border-radius: 16px;
-  padding: 14px 16px;
+  border-radius: 8px;
+  padding: 10px 12px;
   background: rgba(255, 255, 255, 0.82);
   color: var(--text);
   outline: none;
@@ -240,8 +274,8 @@ select:focus {
 
 button {
   border: 0;
-  border-radius: 999px;
-  padding: 14px 18px;
+  border-radius: 8px;
+  padding: 10px 14px;
   cursor: pointer;
   font-weight: 800;
   transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
@@ -265,22 +299,18 @@ button:hover {
 
 .button-row {
   display: flex;
-  gap: 12px;
-  margin: 20px 0 12px;
+  gap: 10px;
+  margin: 12px 0 8px;
 }
 
 .link-card,
 .notice-card,
 .stage-card {
-  padding: 18px;
+  padding: 12px;
 }
 
 .link-card {
-  margin-top: 18px;
-}
-
-.muted-card {
-  background: linear-gradient(135deg, rgba(123, 223, 242, 0.24), rgba(122, 92, 255, 0.08), rgba(255, 255, 255, 0.88));
+  margin-top: 10px;
 }
 
 .control-strip {
@@ -290,7 +320,7 @@ button:hover {
 }
 
 .mini-stat {
-  padding: 16px;
+  padding: 12px;
 }
 
 .mini-stat:nth-child(1) {
@@ -308,12 +338,12 @@ button:hover {
 
 .results-panel {
   display: grid;
-  gap: 14px;
-  margin-top: 18px;
+  gap: 10px;
+  margin-top: 12px;
 }
 
 .vote-card {
-  padding: 18px;
+  padding: 12px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -340,7 +370,7 @@ button:hover {
 }
 
 .empty-card {
-  padding: 18px;
+  padding: 12px;
   color: var(--muted);
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.84), rgba(247, 247, 255, 0.82));
 }
@@ -350,7 +380,7 @@ button:hover {
 }
 
 .status-text {
-  min-height: 24px;
+  min-height: 20px;
   font-weight: 600;
 }
 
@@ -366,6 +396,15 @@ button:hover {
 
   .button-row {
     flex-direction: column;
+  }
+
+  .hero-card {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .home-btn {
+    width: fit-content;
   }
 }
 

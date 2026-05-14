@@ -88,6 +88,7 @@ function parseBody(req) {
 function getOrCreateStory(store, storyId) {
   if (!store.stories[storyId]) {
     store.stories[storyId] = {
+      sessionId: storyId,
       storyId,
       adminKey: crypto.randomBytes(12).toString("hex"),
       revealed: false,
@@ -99,22 +100,42 @@ function getOrCreateStory(store, storyId) {
     store.stories[storyId].adminKey = crypto.randomBytes(12).toString("hex");
   }
 
+  if (!store.stories[storyId].sessionId) {
+    store.stories[storyId].sessionId = storyId;
+  }
+
   return store.stories[storyId];
+}
+
+function createFreshStory(store, storyId) {
+  const sessionId = `${storyId}-${crypto.randomBytes(6).toString("hex")}`;
+  store.stories[sessionId] = {
+    sessionId,
+    storyId,
+    adminKey: crypto.randomBytes(12).toString("hex"),
+    revealed: false,
+    votes: {}
+  };
+
+  return store.stories[sessionId];
 }
 
 function toStoryResponse(story, includeVotes, isAdmin) {
   const voteEntries = Object.values(story.votes)
     .sort((left, right) => left.name.localeCompare(right.name));
+  const canShowPoints = includeVotes;
+  const canShowNames = isAdmin || includeVotes;
 
   return {
+    sessionId: story.sessionId || story.storyId,
     storyId: story.storyId,
     isAdmin,
     revealed: story.revealed,
     totalVotes: voteEntries.length,
-    votes: includeVotes
+    votes: canShowNames
       ? voteEntries.map((entry) => ({
           name: entry.name,
-          points: entry.points
+          points: canShowPoints ? entry.points : null
         }))
       : []
   };
@@ -142,9 +163,10 @@ function routeApi(req, res, url) {
       .then((body) => {
         const requestedStoryId = normalizeId(body.storyId, storyId);
         const store = readStore();
-        const story = getOrCreateStory(store, requestedStoryId);
+        const story = createFreshStory(store, requestedStoryId);
         writeStore(store);
         sendJson(res, 200, {
+          sessionId: story.sessionId,
           storyId: story.storyId,
           adminKey: story.adminKey
         });
@@ -228,7 +250,8 @@ function routeApi(req, res, url) {
           return;
         }
         store.stories[storyId] = {
-          storyId,
+          sessionId: story.sessionId || storyId,
+          storyId: story.storyId || storyId,
           adminKey: story.adminKey,
           revealed: false,
           votes: {}

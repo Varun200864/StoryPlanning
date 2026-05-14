@@ -84,6 +84,7 @@ function getOrCreateStory(array &$store, string $storyId): array
 {
     if (!isset($store['stories'][$storyId]) || !is_array($store['stories'][$storyId])) {
         $store['stories'][$storyId] = [
+            'sessionId' => $storyId,
             'storyId' => $storyId,
             'adminKey' => bin2hex(random_bytes(12)),
             'revealed' => false,
@@ -99,27 +100,48 @@ function getOrCreateStory(array &$store, string $storyId): array
         $store['stories'][$storyId]['votes'] = [];
     }
 
+    if (empty($store['stories'][$storyId]['sessionId'])) {
+        $store['stories'][$storyId]['sessionId'] = $storyId;
+    }
+
     return $store['stories'][$storyId];
+}
+
+function createFreshStory(array &$store, string $storyId): array
+{
+    $sessionId = $storyId . '-' . bin2hex(random_bytes(6));
+    $store['stories'][$sessionId] = [
+        'sessionId' => $sessionId,
+        'storyId' => $storyId,
+        'adminKey' => bin2hex(random_bytes(12)),
+        'revealed' => false,
+        'votes' => []
+    ];
+
+    return $store['stories'][$sessionId];
 }
 
 function toStoryResponse(array $story, bool $includeVotes, bool $isAdmin): array
 {
     $voteEntries = array_values($story['votes'] ?? []);
+    $canShowPoints = $includeVotes;
+    $canShowNames = $isAdmin || $includeVotes;
 
     usort($voteEntries, static function (array $left, array $right): int {
         return strcmp($left['name'] ?? '', $right['name'] ?? '');
     });
 
     return [
+        'sessionId' => $story['sessionId'] ?? $story['storyId'],
         'storyId' => $story['storyId'],
         'isAdmin' => $isAdmin,
         'revealed' => (bool) $story['revealed'],
         'totalVotes' => count($voteEntries),
-        'votes' => $includeVotes
-            ? array_map(static function (array $entry): array {
+        'votes' => $canShowNames
+            ? array_map(static function (array $entry) use ($canShowPoints): array {
                 return [
                     'name' => $entry['name'],
-                    'points' => $entry['points']
+                    'points' => $canShowPoints ? $entry['points'] : null
                 ];
             }, $voteEntries)
             : []
@@ -142,10 +164,11 @@ if ($method === 'POST' && $route === '/story/create') {
     $body = parseBody();
     $requestedStoryId = normalizeId($body['storyId'] ?? $storyId, $storyId);
     $store = readStore($dataDir, $dataFile);
-    $story = getOrCreateStory($store, $requestedStoryId);
+    $story = createFreshStory($store, $requestedStoryId);
     writeStore($dataFile, $store);
 
     sendJson(200, [
+        'sessionId' => $story['sessionId'],
         'storyId' => $story['storyId'],
         'adminKey' => $story['adminKey']
     ]);
@@ -216,7 +239,8 @@ if ($method === 'POST' && $route === '/reset') {
     }
 
     $store['stories'][$storyId] = [
-        'storyId' => $storyId,
+        'sessionId' => $story['sessionId'] ?? $storyId,
+        'storyId' => $story['storyId'] ?? $storyId,
         'adminKey' => $story['adminKey'],
         'revealed' => false,
         'votes' => []
